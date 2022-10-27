@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">LanOrganizer</string>
+    <string name="title_activity_add_lan">AddLanActivity</string>
+    <string name="back_button">Back</string>
+    <string name="create_lan_title">Create a LAN</string>
+    <string name="create_lan">Create a LAN</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="profile">Profile</string>
+    <string name="discover">Discover</string>
+    <string name="lan_list">LAN List</string>
+    <string name="friends">Friends</string>
+    <string name="create_lam">Create LAN</string>
+    <string name="lan_details">Details</string>
+    <string name="select_games">Select Game</string>
+    <string name="summary">Summary</string>
+</resources>
