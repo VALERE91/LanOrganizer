@@ -12,9 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.tech4fun.lanorganizer.R
 import io.tech4fun.lanorganizer.data.states.LanUiState
+import io.tech4fun.lanorganizer.ui.viewmodels.LanViewModel
 
 @Composable
-fun SelectGameScreen(modifier: Modifier = Modifier, lanUiState: LanUiState, onNextButtonClicked : (games: List<String>) -> Unit){
+fun SelectGameScreen(modifier: Modifier = Modifier, lanUiState: LanViewModel, onNextButtonClicked : (games: List<String>) -> Unit){
     Column (modifier = modifier.fillMaxWidth()
         .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,

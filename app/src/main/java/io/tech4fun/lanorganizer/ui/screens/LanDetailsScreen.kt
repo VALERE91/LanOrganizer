@@ -12,10 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.tech4fun.lanorganizer.R
 import io.tech4fun.lanorganizer.data.states.LanUiState
+import io.tech4fun.lanorganizer.ui.viewmodels.LanViewModel
 
 @Composable
 fun DetailsLanScreen(modifier: Modifier = Modifier,
-                     lanUiState: LanUiState,
+                     lanUiState: LanViewModel,
                      onNextButtonClicked : () -> Unit,
                     onShareButtonClicked : () -> Unit){
     Column (modifier = modifier.fillMaxWidth()

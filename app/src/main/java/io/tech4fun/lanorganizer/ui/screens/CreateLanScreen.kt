@@ -11,11 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import io.tech4fun.lanorganizer.R
 import io.tech4fun.lanorganizer.ui.viewmodels.LanViewModel
 
@@ -26,59 +28,51 @@ enum class AddLanRoutes(@StringRes val title: Int) {
     Summary(R.string.summary)
 }
 
-@Composable
-fun AddLanScreen(navController: NavHostController,
-                 modifier: Modifier = Modifier,
-                 viewModel: LanViewModel = LanViewModel(),
-                 onTitleChanged : (Int) -> Unit,
-                 onCanNavigateBackChange: (Boolean) -> Unit){
-    val backSackEntry by navController.currentBackStackEntryAsState()
+fun NavGraphBuilder.createLanGraph(navController: NavController,
+                                    modifier: Modifier = Modifier,
+                                    viewModel: LanViewModel = LanViewModel(),
+                                    onTitleChanged : (Int) -> Unit,
+                                    onCanNavigateBackChange: (Boolean) -> Unit)
+{
 
-    Scaffold() { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
-        NavHost(
-            navController = navController,
-            startDestination = AddLanRoutes.Start.name,
-            modifier = modifier.padding(innerPadding)
-        ) {
-            composable(route = AddLanRoutes.Start.name) {
-                onCanNavigateBackChange(false)
-                StartCreateLanScreen(modifier, onNextButtonClicked = {
-                    navController.navigate(AddLanRoutes.Details.name)
-                })
-            }
-            composable(route = AddLanRoutes.Details.name) {
-                onCanNavigateBackChange(true)
-                EditLanScreen(modifier, uiState, onNextButtonClicked = {
-                    navController.navigate(AddLanRoutes.SelectGames.name)
-                })
-            }
-            composable(route = AddLanRoutes.SelectGames.name) {
-                onCanNavigateBackChange(true)
-                SelectGameScreen(modifier, uiState, onNextButtonClicked = {
-                    navController.navigate(AddLanRoutes.Summary.name)
-                })
-            }
-            composable(route = AddLanRoutes.Summary.name) {
-                onCanNavigateBackChange(true)
-                val context = LocalContext.current
-                DetailsLanScreen(modifier, uiState, onNextButtonClicked = {
-                    navController.popBackStack(AddLanRoutes.Start.name, inclusive = false)
-                }, onShareButtonClicked = {
-                    // Create an ACTION_SEND implicit intent with order details in the intent extras
-                    val intent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_SUBJECT, uiState.name)
-                        putExtra(Intent.EXTRA_TEXT, uiState.location)
-                    }
-                    context.startActivity(
-                        Intent.createChooser(
-                            intent,
-                            "Share your LAN"
-                        )
+    navigation(startDestination = AddLanRoutes.Start.name, route = Screen.LanList.route) {
+        composable(route = AddLanRoutes.Start.name) {
+            onCanNavigateBackChange(false)
+            StartCreateLanScreen(modifier, onNextButtonClicked = {
+                navController.navigate(AddLanRoutes.Details.name)
+            })
+        }
+        composable(route = AddLanRoutes.Details.name) {
+            onCanNavigateBackChange(true)
+            EditLanScreen(modifier, viewModel, onNextButtonClicked = {
+                navController.navigate(AddLanRoutes.SelectGames.name)
+            })
+        }
+        composable(route = AddLanRoutes.SelectGames.name) {
+            onCanNavigateBackChange(true)
+            SelectGameScreen(modifier, viewModel, onNextButtonClicked = {
+                navController.navigate(AddLanRoutes.Summary.name)
+            })
+        }
+        composable(route = AddLanRoutes.Summary.name) {
+            onCanNavigateBackChange(true)
+            val context = LocalContext.current
+            DetailsLanScreen(modifier, viewModel, onNextButtonClicked = {
+                navController.popBackStack(AddLanRoutes.Start.name, inclusive = false)
+            }, onShareButtonClicked = {
+                // Create an ACTION_SEND implicit intent with order details in the intent extras
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, "My Subject")
+                    putExtra(Intent.EXTRA_TEXT, "My location")
+                }
+                context.startActivity(
+                    Intent.createChooser(
+                        intent,
+                        "Share your LAN"
                     )
-                })
-            }
+                )
+            })
         }
     }
 }

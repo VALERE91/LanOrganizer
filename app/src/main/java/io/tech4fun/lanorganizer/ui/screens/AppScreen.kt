@@ -112,17 +112,19 @@ fun AppScreen(modifier: Modifier = Modifier){
     }) {
             innerPadding ->
         NavHost(navController, startDestination = Screen.Profile.route, Modifier.padding(innerPadding)) {
-            composable(Screen.Profile.route) {
-                AddLanScreen(navController, onTitleChanged = {
+            createLanGraph(
+                navController = navController,
+                modifier,
+                onTitleChanged = {
                     currentScreenTitle = it;
                 },
                 onCanNavigateBackChange = {
                     canNavigateBack = it
-                })
-            }
+                }
+            )
             composable(Screen.Friends.route) { FriendsList(navController) }
             composable(Screen.Discover.route) { Discover(navController) }
-            composable(Screen.LanList.route) { LanList(navController) }
+            composable(Screen.Profile.route) { Profile(navController) }
         }
     }
 }

@@ -10,9 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import io.tech4fun.lanorganizer.data.states.LanUiState
+import io.tech4fun.lanorganizer.ui.viewmodels.LanViewModel
 
 @Composable
-fun EditLanScreen(modifier: Modifier = Modifier, lanUiState: LanUiState, onNextButtonClicked : (lanUiState: LanUiState) -> Unit){
+fun EditLanScreen(modifier: Modifier = Modifier, lanUiState: LanViewModel, onNextButtonClicked : (lanUiState: LanViewModel) -> Unit){
     Column (modifier = modifier.fillMaxWidth()
         .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
