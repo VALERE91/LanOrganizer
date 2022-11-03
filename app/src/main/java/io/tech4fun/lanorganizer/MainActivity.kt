@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LanOrganizerTheme {
                 val windowSize = calculateWindowSizeClass(this)
-                AppScreen()
+                AppScreen(windowSize)
             }
         }
     }

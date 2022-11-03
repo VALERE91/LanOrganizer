@@ -9,6 +9,7 @@
     <string name="discover">Discover</string>
     <string name="lan_list">LAN List</string>
     <string name="friends">Friends</string>
+    <string name="navigation_drawer">Navigation Drawer</string>
     <string name="create_lam">Create LAN</string>
     <string name="lan_details">Details</string>
     <string name="select_games">Select Game</string>
