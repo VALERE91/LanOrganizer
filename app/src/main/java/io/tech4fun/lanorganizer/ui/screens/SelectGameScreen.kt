@@ -1,27 +1,51 @@
 package io.tech4fun.lanorganizer.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import io.tech4fun.lanorganizer.R
-import io.tech4fun.lanorganizer.data.states.LanUiState
-import io.tech4fun.lanorganizer.ui.viewmodels.LanViewModel
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.tech4fun.lanorganizer.data.states.GameUiState
+import io.tech4fun.lanorganizer.ui.viewmodels.GameViewModel
 
 @Composable
-fun SelectGameScreen(modifier: Modifier = Modifier, lanUiState: LanViewModel, onNextButtonClicked : (games: List<String>) -> Unit){
-    Column (modifier = modifier.fillMaxWidth()
-        .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
-        Button(onClick = { onNextButtonClicked(listOf("CoD", "R6")) }) {
-            Text(text = "Next")
+fun SelectGameScreen(modifier: Modifier = Modifier, onNextButtonClicked : (games: List<String>) -> Unit){
+    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
+    val gameList = viewModel.uiState.collectAsState()
+
+    Scaffold(
+        content = {
+            GameList(gameList = gameList.value, modifier.padding(it))
+        }
+    )
+}
+
+@Composable
+private fun GameList(gameList: List<GameUiState>, modifier: Modifier = Modifier) {
+    LazyColumn() {
+        items(count = gameList.size,
+            contentType = {
+                it
+            }){
+            GameCard(game = gameList[it])
+        }
+    }
+}
+
+@Composable
+private fun GameCard(game: GameUiState, modifier: Modifier = Modifier) {
+    Card(modifier = modifier.padding(8.dp)) {
+        Row() {
+            Text(text = game.name,
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.titleMedium)
         }
     }
 }

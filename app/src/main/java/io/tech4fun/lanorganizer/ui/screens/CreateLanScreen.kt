@@ -50,7 +50,7 @@ fun NavGraphBuilder.createLanGraph(navController: NavController,
         }
         composable(route = AddLanRoutes.SelectGames.name) {
             onCanNavigateBackChange(true)
-            SelectGameScreen(modifier, viewModel, onNextButtonClicked = {
+            SelectGameScreen(modifier, onNextButtonClicked = {
                 navController.navigate(AddLanRoutes.Summary.name)
             })
         }
