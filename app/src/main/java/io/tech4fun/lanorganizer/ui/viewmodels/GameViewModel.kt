@@ -1,13 +1,8 @@
 package io.tech4fun.lanorganizer.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.tech4fun.lanorganizer.LanOrganizerApplication
 import io.tech4fun.lanorganizer.data.repository.GameRepository
 import io.tech4fun.lanorganizer.data.states.GameUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,16 +27,6 @@ class GameViewModel @Inject constructor(private val gameRepository: GameReposito
                 })
             }catch(e: Exception){
 
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = (this[APPLICATION_KEY] as LanOrganizerApplication)
-                val gameRpo = app.container.gameRepository
-                GameViewModel(gameRpo)
             }
         }
     }
