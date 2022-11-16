@@ -1,12 +1,12 @@
 package io.tech4fun.lanorganizer.ui.viewmodels
 
-import android.text.Spannable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.tech4fun.lanorganizer.LanOrganizerApplication
 import io.tech4fun.lanorganizer.data.repository.GameRepository
 import io.tech4fun.lanorganizer.data.states.GameUiState
@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameViewModel(private val gameRepository: GameRepository) : ViewModel() {
+@HiltViewModel
+class GameViewModel @Inject constructor(private val gameRepository: GameRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(listOf<GameUiState>())
 

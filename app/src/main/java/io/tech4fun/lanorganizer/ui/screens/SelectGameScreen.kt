@@ -16,8 +16,7 @@ import io.tech4fun.lanorganizer.data.states.GameUiState
 import io.tech4fun.lanorganizer.ui.viewmodels.GameViewModel
 
 @Composable
-fun SelectGameScreen(modifier: Modifier = Modifier, onNextButtonClicked : (games: List<String>) -> Unit){
-    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
+fun SelectGameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = viewModel(), onNextButtonClicked : (games: List<String>) -> Unit){
     val gameList = viewModel.uiState.collectAsState()
 
     Scaffold(

@@ -31,6 +31,6 @@ class DefaultAppContainer : AppContainer {
         get() = TODO("Not yet implemented")
 
     override val gameRepository: GameRepository by lazy {
-        DefaultGameRepository(gameSource)
+        DefaultGameRepository()
     }
 }

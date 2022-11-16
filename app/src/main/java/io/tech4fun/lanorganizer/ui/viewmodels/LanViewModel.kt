@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDateTime
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class LanViewModel {
     private val _uiState = MutableStateFlow(LanUiState())
 
