@@ -11,12 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.tech4fun.lanorganizer.data.states.GameUiState
 import io.tech4fun.lanorganizer.ui.viewmodels.GameViewModel
 
 @Composable
-fun SelectGameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = viewModel(), onNextButtonClicked : (games: List<String>) -> Unit){
+fun SelectGameScreen(modifier: Modifier = Modifier, viewModel: GameViewModel = hiltViewModel(), onNextButtonClicked : (games: List<String>) -> Unit){
     val gameList = viewModel.uiState.collectAsState()
 
     Scaffold(
