@@ -1,6 +1,10 @@
 package io.tech4fun.lanorganizer.data.sources
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.addAdapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +14,7 @@ import io.tech4fun.lanorganizer.data.repository.DefaultGameRepository
 import io.tech4fun.lanorganizer.data.repository.GameRepository
 import io.tech4fun.lanorganizer.data.repository.GameSource
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
 import javax.inject.Singleton
@@ -17,18 +22,23 @@ import javax.inject.Singleton
 object GameOnlineSource : GameSource {
     private const val BASE_URL = "http://api.steampowered.com"
 
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
     data class SteamAppList (
-        @Json(name = "applist")
-        val appList: SteamApps
+        @field:Json(name = "applist")
+        val applist: SteamApps
     )
 
     data class SteamApps (
-        @Json(name = "apps")
-        val list: List<GameModel>
+        @field:Json(name = "apps")
+        val apps: List<GameModel>
     )
 
     interface SteamAppsService{
@@ -41,18 +51,8 @@ object GameOnlineSource : GameSource {
     }
 
     override suspend fun getGames(): List<GameModel> {
-        return retrofitService.GetAppList().appList.list.map {
-            GameModel(it.name, it.steamAppId)
+        return retrofitService.GetAppList().applist.apps.map {
+            GameModel(0, it.name, it.steamAppId)
         }
-    }
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-object GameSourceModule {
-    @Provides
-    @Singleton
-    fun provideGameSource(): GameSource {
-        return GameOnlineSource
     }
 }
