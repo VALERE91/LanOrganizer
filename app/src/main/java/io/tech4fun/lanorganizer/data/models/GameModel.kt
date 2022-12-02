@@ -19,5 +19,9 @@ data class GameModel (
 
     @NonNull @ColumnInfo(name = "app_id")
    // @field:Json(name = "appid")
-    var steamAppId: Int
+    var steamAppId: Int,
+
+    @ColumnInfo(name = "image")
+    // @field:Json(name = "image")
+    var appImage: String
 )

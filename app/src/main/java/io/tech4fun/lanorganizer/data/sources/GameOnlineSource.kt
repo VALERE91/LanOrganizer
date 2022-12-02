@@ -20,7 +20,7 @@ import retrofit2.http.GET
 import javax.inject.Singleton
 
 object GameOnlineSource : GameSource {
-    private const val BASE_URL = "http://localhost:8888"
+    private const val BASE_URL = "https://60b00d3c1f26610017ffdc23.mockapi.io/api/v1/"
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -42,7 +42,7 @@ object GameOnlineSource : GameSource {
 
     override suspend fun getGames(): List<GameModel> {
         return retrofitService.GetAppList().map {
-            GameModel(0, it.name, it.steamAppId)
+            GameModel(0, it.name, it.steamAppId, it.appImage)
         }
     }
 }
