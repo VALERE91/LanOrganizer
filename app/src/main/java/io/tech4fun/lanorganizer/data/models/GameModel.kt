@@ -9,19 +9,15 @@ import com.squareup.moshi.Json
 
 @Entity(tableName = "games")
 data class GameModel (
-    //@Transient
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id: Int,
 
     @NonNull @ColumnInfo(name = "name")
-   // @field:Json(name = "name")
     var name: String,
 
-    @NonNull @ColumnInfo(name = "app_id")
-   // @field:Json(name = "appid")
+    @Json(name = "app_id") @NonNull @ColumnInfo(name = "app_id")
     var steamAppId: Int,
 
-    @ColumnInfo(name = "image")
-    // @field:Json(name = "image")
+    @ColumnInfo(name = "image") @Json(name = "image")
     var appImage: String
 )

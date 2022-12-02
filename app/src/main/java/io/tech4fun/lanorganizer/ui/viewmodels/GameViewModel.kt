@@ -1,6 +1,5 @@
 package io.tech4fun.lanorganizer.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +7,6 @@ import io.tech4fun.lanorganizer.data.repository.GameRepository
 import io.tech4fun.lanorganizer.data.states.GameUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,22 +19,20 @@ class GameViewModel @Inject constructor(private val gameRepository: GameReposito
 
     private val _uiState = MutableStateFlow(listOf<GameUiState>())
 
-    val uiState: StateFlow<List<GameUiState>> = _uiState.asStateFlow()
+    val uiState: StateFlow<List<GameUiState>> = _uiState
 
-    private fun getSteamApps(){
+    private fun getGames() {
         viewModelScope.launch {
-            try {
-                val listResult = gameRepository.getSteamApps()
-                _uiState.emit(listResult.map {
-                    GameUiState(it.name, "")
-                })
-            }catch(e: Exception){
-                e.message?.let { Log.e(TAG, it) }
+            gameRepository.getSteamApps().collect { list ->
+                val listUi = list.map {
+                    GameUiState(it.name, it.appImage)
+                }
+                _uiState.emit(listUi)
             }
         }
     }
 
     init {
-        getSteamApps()
+        getGames()
     }
 }

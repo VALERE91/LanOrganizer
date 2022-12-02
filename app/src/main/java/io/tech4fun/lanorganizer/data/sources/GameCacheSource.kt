@@ -3,6 +3,7 @@ package io.tech4fun.lanorganizer.data.sources
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,21 +15,20 @@ import dagger.hilt.components.SingletonComponent
 import io.tech4fun.lanorganizer.LanOrganizerApplication
 import io.tech4fun.lanorganizer.data.AppDatabase
 import io.tech4fun.lanorganizer.data.models.GameModel
-import io.tech4fun.lanorganizer.data.repository.DefaultGameRepoEntryPoint
 import io.tech4fun.lanorganizer.data.repository.GameSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.time.Instant
-import java.util.*
 
 
 @Dao
 interface GameDao{
     @Query("SELECT * FROM games")
-    fun getAll(): LiveData<List<GameModel>>
+    fun getAll(): Flow<List<GameModel>>
 
     @Query("SELECT * FROM games WHERE name = :gameName")
-    fun getByName(gameName: String): LiveData<GameModel>
+    fun getByName(gameName: String): Flow<GameModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(game: List<GameModel>)
@@ -51,8 +51,6 @@ object GameCacheSource : GameSource {
         appDatabase = utilitiesEntryPoint?.appDatabase!!
     }
 
-    val videos: LiveData<List<GameModel>> = appDatabase.gameDao().getAll()
-
     suspend fun refreshGames(){
         withContext(Dispatchers.IO){
             val games = GameOnlineSource.getGames()
@@ -60,10 +58,9 @@ object GameCacheSource : GameSource {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getGames(): List<GameModel> {
+    override suspend fun getGames(): Flow<List<GameModel>> {
         refreshGames()
-        return appDatabase.gameDao().getAll().value!!
+        return appDatabase.gameDao().getAll()
     }
 }
 

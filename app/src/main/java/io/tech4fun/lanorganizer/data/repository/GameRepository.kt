@@ -1,6 +1,5 @@
 package io.tech4fun.lanorganizer.data.repository
 
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.getInstance
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -10,21 +9,22 @@ import dagger.hilt.components.SingletonComponent
 import io.tech4fun.lanorganizer.LanOrganizerApplication
 import io.tech4fun.lanorganizer.data.models.GameModel
 import io.tech4fun.lanorganizer.data.sources.GameCacheSource
-import io.tech4fun.lanorganizer.data.sources.GameOnlineSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 interface GameSource {
-    suspend fun getGames(): List<GameModel>
+    suspend fun getGames(): Flow<List<GameModel>>
 }
 
 interface GameRepository{
-    suspend fun getSteamApps(): List<GameModel>
+    suspend fun getSteamApps(): Flow<List<GameModel>>
 }
 
 class DefaultGameRepository @Inject constructor(): GameRepository {
 
-    private lateinit var gameSource : GameSource
+    private var gameSource : GameSource
 
     init {
         val appContext = LanOrganizerApplication.getContext()
@@ -34,9 +34,10 @@ class DefaultGameRepository @Inject constructor(): GameRepository {
                     it, DefaultGameRepoEntryPoint::class.java)
             }
         gameSource = utilitiesEntryPoint?.gameSource!!
+
     }
 
-    override suspend fun getSteamApps(): List<GameModel> {
+    override suspend fun getSteamApps(): Flow<List<GameModel>> {
         return gameSource.getGames()
     }
 }
