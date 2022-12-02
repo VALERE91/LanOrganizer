@@ -2,12 +2,14 @@ package io.tech4fun.lanorganizer.data.sources
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -16,10 +18,12 @@ import io.tech4fun.lanorganizer.LanOrganizerApplication
 import io.tech4fun.lanorganizer.data.AppDatabase
 import io.tech4fun.lanorganizer.data.models.GameModel
 import io.tech4fun.lanorganizer.data.repository.GameSource
+import io.tech4fun.lanorganizer.work.RefreshDataWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 
 @Dao
@@ -49,6 +53,10 @@ object GameCacheSource : GameSource {
                     it, DefaultCacheGameSourceEntryPoint::class.java)
             }
         appDatabase = utilitiesEntryPoint?.appDatabase!!
+
+        //Launch a periodic work to update the cache
+        val repeatingRequest = OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
+        WorkManager.getInstance(LanOrganizerApplication.getContext()!!).enqueue(repeatingRequest);
     }
 
     suspend fun refreshGames(){
