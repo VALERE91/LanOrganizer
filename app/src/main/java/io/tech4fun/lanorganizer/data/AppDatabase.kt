@@ -15,7 +15,7 @@ import io.tech4fun.lanorganizer.data.sources.GameCacheSource
 import io.tech4fun.lanorganizer.data.sources.GameDao
 import javax.inject.Singleton
 
-@Database(entities = arrayOf(GameModel::class), version = 1)
+@Database(entities = [GameModel::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun gameDao(): GameDao
 

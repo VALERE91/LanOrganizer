@@ -20,7 +20,7 @@ import retrofit2.http.GET
 import javax.inject.Singleton
 
 object GameOnlineSource : GameSource {
-    private const val BASE_URL = "http://api.steampowered.com"
+    private const val BASE_URL = "http://localhost:8888"
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -31,19 +31,9 @@ object GameOnlineSource : GameSource {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    data class SteamAppList (
-        @field:Json(name = "applist")
-        val applist: SteamApps
-    )
-
-    data class SteamApps (
-        @field:Json(name = "apps")
-        val apps: List<GameModel>
-    )
-
     interface SteamAppsService{
-        @GET("ISteamApps/GetAppList/v0002?format=json")
-        suspend fun GetAppList() : SteamAppList
+        @GET("games")
+        suspend fun GetAppList() : List<GameModel>
     }
 
     private val retrofitService: SteamAppsService by lazy {
@@ -51,7 +41,7 @@ object GameOnlineSource : GameSource {
     }
 
     override suspend fun getGames(): List<GameModel> {
-        return retrofitService.GetAppList().applist.apps.map {
+        return retrofitService.GetAppList().map {
             GameModel(0, it.name, it.steamAppId)
         }
     }
