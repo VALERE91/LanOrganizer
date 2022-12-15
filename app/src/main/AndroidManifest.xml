@@ -4,10 +4,11 @@
     package="io.tech4fun.lanorganizer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".LanOrganizerApplication"
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,7 +17,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LanOrganizer"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service
+            android:name=".services.MyForegroundService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".services.MyBoundService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -32,7 +43,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.LanOrganizer"></activity>
+            android:theme="@style/Theme.LanOrganizer" />
     </application>
 
 </manifest>

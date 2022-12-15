@@ -55,7 +55,7 @@ object GameCacheSource : GameSource {
         appDatabase = utilitiesEntryPoint?.appDatabase!!
 
         //Launch a periodic work to update the cache
-        val repeatingRequest = OneTimeWorkRequestBuilder<RefreshDataWorker>().build()
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.HOURS).build()
         WorkManager.getInstance(LanOrganizerApplication.getContext()!!).enqueue(repeatingRequest);
     }
 
@@ -67,7 +67,7 @@ object GameCacheSource : GameSource {
     }
 
     override suspend fun getGames(): Flow<List<GameModel>> {
-        refreshGames()
+        //refreshGames()
         return appDatabase.gameDao().getAll()
     }
 }

@@ -18,7 +18,7 @@ class LocationViewModel @Inject constructor(private val locationRepository: Loca
     private fun getSteamApps(){
         viewModelScope.launch {
             val locationResult = locationRepository.getLocation()
-            _uiState.emit(LocationUiState(latitude = locationResult.latitude, longitude = locationResult.longitude))
+            //_uiState.emit(LocationUiState(latitude = locationResult., longitude = locationResult.longitude))
         }
     }
 }
